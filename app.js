@@ -1,6 +1,13 @@
 // requerir express
 require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
+
+// conexion a la base de datos
+mongoose
+  .connect('mongodb://localhost/estanbienpodridos', { useNewUrlParser: true })
+  .then(() => console.log('Connected to the DB'))
+  .catch((err) => console.log(err));
 
 // crear servidor
 const app = express();
@@ -12,9 +19,7 @@ app.use(express.static('public'));
 app.set('view engine', 'hbs');
 app.set('views', `${__dirname}/views`);
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
+app.use('/', require('./routes/index.js'));
 
 // levantamos el servidor
 app.listen(process.env.PORT, () => {
